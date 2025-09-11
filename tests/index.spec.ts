@@ -1,7 +1,7 @@
 import { expect, describe, it } from 'vitest';
-import { getAddressInfo } from '../src/parseBitcoinAddress';
 import { parseInput } from '../src/index';
-describe('Validation and parsing', () => {
+
+describe('plain bitcoin addresses', () => {
   it('validates Mainnet P2PKH', () => {
     const address = '17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem';
 
@@ -66,5 +66,89 @@ describe('Validation and parsing', () => {
 
   it('errors on non-base58 encoded', () => {
     expect(parseInput('???')?.type).toEqual(undefined);
+  });
+});
+
+describe('bip21 bitcoin addresses', () => {
+  it('none', () => {
+    const address = '1andreas3batLhQa2FawWjeyjCqyBzypd';
+    const result = parseInput(address);
+    expect(result?.type).toEqual('bitcoinAddress');
+    expect(result?.data).toEqual({
+      address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+    });
+  });
+
+  it('capitalized bitcoin', () => {
+    const address = 'BITCOIN:1andreas3batLhQa2FawWjeyjCqyBzypd';
+    const result = parseInput(address);
+    expect(result?.type).toEqual('bitcoinAddress');
+    expect(result?.data).toEqual({
+      address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+    });
+  });
+
+  it('lowercase bitcoin', () => {
+    const address = 'bitcoin:1andreas3batLhQa2FawWjeyjCqyBzypd';
+
+    const result = parseInput(address);
+    expect(result?.type).toEqual('bitcoinAddress');
+    expect(result?.data).toEqual({
+      address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+    });
+  });
+
+  it('bitcoin with amount', () => {
+    const address = 'bitcoin:1andreas3batLhQa2FawWjeyjCqyBzypd?amount=0.00002000';
+    const result = parseInput(address);
+    expect(result?.type).toEqual('bitcoinAddress');
+    expect(result?.data).toEqual({
+      address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+      amount: '0.00002000',
+    });
+  });
+  it('bitcoin with label', () => {
+    const address = 'bitcoin:1andreas3batLhQa2FawWjeyjCqyBzypd?amount=0.00002000&label=Hello';
+    const result = parseInput(address);
+    expect(result?.type).toEqual('bitcoinAddress');
+    expect(result?.data).toEqual({
+      address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+      amount: '0.00002000',
+      label: 'Hello',
+    });
+  });
+
+  it('bitcoin with label and message', () => {
+    const address = 'bitcoin:1andreas3batLhQa2FawWjeyjCqyBzypd?amount=0.00002000&label=Hello&message=Msg';
+    const result = parseInput(address);
+    expect(result?.type).toEqual('bitcoinAddress');
+    expect(result?.data).toEqual({
+      address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+      amount: '0.00002000',
+      label: 'Hello',
+      message: 'Msg',
+    });
+  });
+
+  it('bitcoin with label and message upper', () => {
+    const address = 'BITCOIN:1andreas3batLhQa2FawWjeyjCqyBzypd?amount=0.00002000&label=Hello&message=Msg';
+    const result = parseInput(address);
+    expect(result?.type).toEqual('bitcoinAddress');
+    expect(result?.data).toEqual({
+      address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+      amount: '0.00002000',
+      label: 'Hello',
+      message: 'Msg',
+    });
+  });
+
+  it('bitcoin with lightning', () => {
+    const address =
+      'bitcoin:bc1qhr8mncfw3q7lr8f0fxj08lggm5l8s80ahzm5tl?amount=0.00000021&lightning=lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk';
+    const result = parseInput(address);
+    expect(result?.type).toEqual('lightningAddress');
+    expect(result?.data).toEqual({
+      address: 'lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk',
+    });
   });
 });

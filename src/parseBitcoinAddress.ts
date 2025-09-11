@@ -177,7 +177,7 @@ const getAddressInfo = (address: string, options?: Options): AddressInfo => {
   );
 };
 
-const validate = (address: string, network?: Network, options?: Options) => {
+const isBitcoinAddress = (address: string, network?: Network, options?: Options) => {
   try {
     const addressInfo = getAddressInfo(address, options);
 
@@ -191,6 +191,6 @@ const validate = (address: string, network?: Network, options?: Options) => {
   }
 };
 
-export { getAddressInfo, Network, AddressType, validate };
+export { getAddressInfo, Network, AddressType, isBitcoinAddress };
 export type { AddressInfo };
-export default validate;
+export default isBitcoinAddress;

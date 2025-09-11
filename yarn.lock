@@ -983,6 +983,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bip21@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "bip21@npm:3.0.0"
+  dependencies:
+    query-string: ^9.0.0
+  checksum: 75a088ef7d303bfdcf09617bff5bbe5a6f12f6f5f19afe37b2385c32d70f528b75c336047fbc201474380a279af31fccb3773474675bf72151c690a759b8a713
+  languageName: node
+  linkType: hard
+
 "bitcoin-address-parser@workspace:.":
   version: 0.0.0-use.local
   resolution: "bitcoin-address-parser@workspace:."
@@ -992,6 +1001,7 @@ __metadata:
     "@types/sha.js": ^2.4.0
     base58-js: ^3.0.2
     bech32: ^2.0.0
+    bip21: ^3.0.0
     prettier: ^3.5.1
     sha256-uint8array: ^0.10.3
     typescript: ^5.7.3
@@ -1199,6 +1209,13 @@ __metadata:
     supports-color:
       optional: true
   checksum: a43826a01cda685ee4cec00fb2d3322eaa90ccadbef60d9287debc2a886be3e835d9199c80070ede75a409ee57828c4c6cd80e4b154f2843f0dc95a570dc0729
+  languageName: node
+  linkType: hard
+
+"decode-uri-component@npm:^0.4.1":
+  version: 0.4.1
+  resolution: "decode-uri-component@npm:0.4.1"
+  checksum: 0473924860986fb6ca19ee65a2af13e08801b4f3660475b058500ea8479ed715c919884a026b6bf4296dbb640d3cea74fadf45490b2439152fc548271d0201ec
   languageName: node
   linkType: hard
 
@@ -1503,6 +1520,13 @@ __metadata:
   dependencies:
     to-regex-range: ^5.0.1
   checksum: b4abfbca3839a3d55e4ae5ec62e131e2e356bf4859ce8480c64c4876100f4df292a63e5bb1618e1d7460282ca2b305653064f01654474aa35c68000980f17798
+  languageName: node
+  linkType: hard
+
+"filter-obj@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "filter-obj@npm:5.1.0"
+  checksum: ba7c24d9b2c0552ee87d268e07eca74483af61fb740545ffa809f7e9e5294de38cf163ecc55af0e8a40020af9a49512c32f4022de2a858b110420fc8bffa7c9c
   languageName: node
   linkType: hard
 
@@ -2335,6 +2359,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"query-string@npm:^9.0.0":
+  version: 9.3.0
+  resolution: "query-string@npm:9.3.0"
+  dependencies:
+    decode-uri-component: ^0.4.1
+    filter-obj: ^5.1.0
+    split-on-first: ^3.0.0
+  checksum: 4a67fac53d84fe5982576fe403d02970aab278520579a09ea114537160863573947d0b54bdb787321a406e13c777fd6d35a23670d643a0e530ac170890cc0c77
+  languageName: node
+  linkType: hard
+
 "queue-microtask@npm:^1.2.2":
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
@@ -2577,6 +2612,13 @@ __metadata:
     cross-spawn: ^7.0.5
     signal-exit: ^4.0.1
   checksum: 47d88a7f1e5691e13e435eddc3d34123c2f7746e2853e91bfac5ea7c6e3bb4b1d1995223b25f7a8745871510d92f63ecd3c9fa02aa2896ac0c79fb618eb08bbe
+  languageName: node
+  linkType: hard
+
+"split-on-first@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "split-on-first@npm:3.0.0"
+  checksum: 75dc27ecbac65cfbeab9a3b90cf046307220192d3d7a30e46aa0f19571cc9b4802aac813f3de2cc9b16f2e46aae72f275659b5d2614bb5369c77724d739e5f73
   languageName: node
   linkType: hard
 
