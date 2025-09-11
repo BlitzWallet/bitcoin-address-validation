@@ -44,10 +44,7 @@ function parseInput(input: string) {
     }
   } catch (err) {
     console.log(err);
-    if (err instanceof Error) {
-      return err.message;
-    }
-    return String(err);
+    throw new Error(typeof err === 'string' ? err : err instanceof Error ? err.message : JSON.stringify(err));
   }
 }
 export { parseInput };
