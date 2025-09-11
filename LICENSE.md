@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2018 Rui Gomes <hello@ruigomes.me>
+Copyright (c) 2025 Blake Kaufman <blake@blitz-wallet.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
