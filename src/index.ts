@@ -1,3 +1,4 @@
+import { EMAIL_REGEX, WEBSITE_REGEX } from './constants.js';
 import { parseBip21Addressess } from './handleBip21Addresses.js';
 import { isBitcoinAddress } from './parseBitcoinAddress.js';
 import { parseLightningAddress } from './parseLightningAddress.js';
@@ -66,6 +67,26 @@ async function parseInput(input: string) {
 
     if (input.toLowerCase().startsWith('lnurl')) {
       const lightningParse = await parseLightningAddress(input);
+      console.log(lightningParse);
+      if (lightningParse) {
+        return lightningParse;
+      } else throw new Error('Invalid lightning argument');
+    }
+
+    if (EMAIL_REGEX.test(input.toLowerCase())) {
+      const lightningParse = await parseLightningAddress(input);
+      console.log(lightningParse);
+      if (lightningParse) {
+        return lightningParse;
+      } else throw new Error('Invalid lightning argument');
+    }
+
+    if (WEBSITE_REGEX.test(input.toLowerCase())) {
+      const urlObj = new URL(input);
+      const params = urlObj.searchParams;
+      const lightningInvoiceAsQuery = params.get('lightning');
+
+      const lightningParse = await parseLightningAddress(lightningInvoiceAsQuery ? lightningInvoiceAsQuery : input);
       console.log(lightningParse);
       if (lightningParse) {
         return lightningParse;
