@@ -1079,7 +1079,7 @@ __metadata:
     bolt11: ^1.4.1
     js-lnurl: ^0.6.0
     prettier: ^3.5.1
-    sha256-uint8array: ^0.10.3
+    sha256-uint8array: ^0.10.7
     typescript: ^5.7.3
     vitest: ^3.0.5
   languageName: unknown
@@ -3134,10 +3134,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sha256-uint8array@npm:^0.10.3":
-  version: 0.10.5
-  resolution: "sha256-uint8array@npm:0.10.5"
-  checksum: 30fd8aaaa2155f4713d569bf9693e869e85bfc51e8cd40fcc9a2b7b15d99872c2fe739f529d49f6d0b0edfdbfcee0e57f2fbfa0efdffcaa026946a4f3db5e6eb
+"sha256-uint8array@npm:^0.10.7":
+  version: 0.10.7
+  resolution: "sha256-uint8array@npm:0.10.7"
+  checksum: ff735efd42664ab3d663cbc71a2e5f58a02637e9d57e072c509b5765f5368a2dc34fafefa390e065ef24415946b780ac72fd4582eeeb745ece42256de5b85e94
   languageName: node
   linkType: hard
 

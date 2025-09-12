@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Parse any Bitcoin address - Bolt11, Bitcoin, LNURL, URI",
   "homepage": "https://github.com/blitzwallet/bitcoin-address-parser",
-  "bugs": "https://github.com/blitzwallet/bitcoin-address-parser/issues",
+  "bugs": {
+    "url": "https://github.com/blitzwallet/bitcoin-address-parser/issues"
+  },
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -30,15 +32,11 @@
     "bolt11",
     "uri"
   ],
-  "author": {
-    "name": "Blake Kaufman",
-    "email": "blake@blitz-wallet.com",
-    "url": "https://blitzwalletapp.com"
-  },
+  "author": "Blake Kaufman <blake@blitz-wallet.com> (https://blitzwalletapp.com)",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/blitzwallet/bitcoin-address-parser"
+    "url": "git+https://github.com/blitzwallet/bitcoin-address-parser.git"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.3",
@@ -54,6 +52,9 @@
     "bip21": "^3.0.0",
     "bolt11": "^1.4.1",
     "js-lnurl": "^0.6.0",
-    "sha256-uint8array": "^0.10.3"
+    "sha256-uint8array": "^0.10.7"
+  },
+  "directories": {
+    "test": "tests"
   }
 }

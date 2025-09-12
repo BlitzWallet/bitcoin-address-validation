@@ -1,4 +1,4 @@
-import { EMAIL_REGEX, WEBSITE_REGEX } from './constants.js';
+import { EMAIL_REGEX, InputTypes, WEBSITE_REGEX } from './constants.js';
 import { parseBip21Addressess } from './handleBip21Addresses.js';
 import { isBitcoinAddress } from './parseBitcoinAddress.js';
 import { parseLightningAddress } from './parseLightningAddress.js';
@@ -97,4 +97,5 @@ async function parseInput(input: string) {
     throw new Error(typeof err === 'string' ? err : err instanceof Error ? err.message : JSON.stringify(err));
   }
 }
-export { parseInput };
+
+export { parseInput, InputTypes };
