@@ -7,6 +7,12 @@
     "url": "https://github.com/blitzwallet/bitcoin-address-parser/issues"
   },
   "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js"
+    }
+  },
   "files": [
     "dist"
   ],
