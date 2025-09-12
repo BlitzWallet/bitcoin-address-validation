@@ -2,127 +2,152 @@ import { expect, describe, it } from 'vitest';
 import { parseInput } from '../src/index';
 
 describe('plain bitcoin addresses', () => {
-  it('validates Mainnet P2PKH', () => {
+  it('validates Mainnet P2PKH', async () => {
     const address = '17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem';
 
-    expect(parseInput(address)?.type).toEqual('bitcoinAddress');
+    const result = await parseInput(address);
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
   });
 
-  it('fails on invalid P2PKH', () => {
+  it('fails on invalid P2PKH', async () => {
     const address = '17VZNX1SN5NtKa8UFFxwQbFeFc3iqRYhem';
 
-    expect(parseInput(address)?.type).toEqual(undefined);
+    const result = await parseInput(address);
+    expect(result && 'type' in result ? result.type : undefined).toEqual(undefined);
   });
 
-  it('validates Mainnet P2SH', () => {
+  it('validates Mainnet P2SH', async () => {
     const address = '3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy';
 
-    expect(parseInput(address)?.type).toEqual('bitcoinAddress');
+    const result = await parseInput(address);
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
   });
 
-  it('fails on invalid P2SH', () => {
+  it('fails on invalid P2SH', async () => {
     const address = '17VZNX1SN5NtKa8UFFxwQbFFFc3iqRYhem';
 
-    expect(parseInput(address)?.type).toEqual(undefined);
+    const result = await parseInput(address);
+    expect(result && 'type' in result ? result.type : undefined).toEqual(undefined);
   });
 
-  it('handles bogus address', () => {
+  it('handles bogus address', async () => {
     const address = 'x';
 
-    expect(parseInput(address)?.type).toEqual(undefined);
+    const result = await parseInput(address);
+    expect(result && 'type' in result ? result.type : undefined).toEqual(undefined);
   });
 
-  it('validates Mainnet Bech32 P2WPKH', () => {
+  it('validates Mainnet Bech32 P2WPKH', async () => {
     const addresses = ['bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4', 'bc1q973xrrgje6etkkn9q9azzsgpxeddats8ckvp5s'];
 
-    expect(parseInput(addresses[0])?.type).toEqual('bitcoinAddress');
-    expect(parseInput(addresses[1])?.type).toEqual('bitcoinAddress');
+    const result1 = await parseInput(addresses[0]);
+    const result2 = await parseInput(addresses[1]);
+
+    expect(result1 && 'type' in result1 ? result1.type : undefined).toEqual('bitcoinAddress');
+    expect(result2 && 'type' in result2 ? result2.type : undefined).toEqual('bitcoinAddress');
   });
 
-  it('validates uppercase Bech32 P2WPKH', () => {
+  it('validates uppercase Bech32 P2WPKH', async () => {
     const addresses = ['BC1Q973XRRGJE6ETKKN9Q9AZZSGPXEDDATS8CKVP5S', 'BC1QW508D6QEJXTDG4Y5R3ZARVARY0C5XW7KV8F3T4'];
 
-    expect(parseInput(addresses[0])?.type).toEqual('bitcoinAddress');
-    expect(parseInput(addresses[1])?.type).toEqual('bitcoinAddress');
+    const result1 = await parseInput(addresses[0]);
+    const result2 = await parseInput(addresses[1]);
+
+    expect(result1 && 'type' in result1 ? result1.type : undefined).toEqual('bitcoinAddress');
+    expect(result2 && 'type' in result2 ? result2.type : undefined).toEqual('bitcoinAddress');
   });
 
-  it('validates Mainnet Bech32 P2TR', () => {
+  it('validates Mainnet Bech32 P2TR', async () => {
     const address = 'bc1ptxs597p3fnpd8gwut5p467ulsydae3rp9z75hd99w8k3ljr9g9rqx6ynaw';
 
-    expect(parseInput(address)?.type).toEqual('bitcoinAddress');
+    const result = await parseInput(address);
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
   });
 
-  it('validates Mainnet Bech32 P2WSH', () => {
+  it('validates Mainnet Bech32 P2WSH', async () => {
     const address = 'bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3';
 
-    expect(parseInput(address)?.type).toEqual('bitcoinAddress');
+    const result = await parseInput(address);
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
   });
 
-  it('fails on invalid Bech32', () => {
+  it('fails on invalid Bech32', async () => {
     const address = 'bc1qw508d6qejxtdg4y5r3zrrvary0c5xw7kv8f3t4';
 
-    expect(parseInput(address)?.type).toEqual(undefined);
+    const result = await parseInput(address);
+    expect(result && 'type' in result ? result.type : undefined).toEqual(undefined);
   });
 
-  it('errors on non-base58 encoded', () => {
-    expect(parseInput('???')?.type).toEqual(undefined);
+  it('errors on non-base58 encoded', async () => {
+    const result = await parseInput('???');
+    expect(result && 'type' in result ? result.type : undefined).toEqual(undefined);
   });
 });
 
-describe('bip21 bitcoin addresses', () => {
-  it('none', () => {
+describe('bip21 bitcoin addresses', async () => {
+  it('none', async () => {
     const address = '1andreas3batLhQa2FawWjeyjCqyBzypd';
-    const result = parseInput(address);
-    expect(result?.type).toEqual('bitcoinAddress');
-    expect(result?.data).toEqual({
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
     });
   });
 
-  it('capitalized bitcoin', () => {
+  it('capitalized bitcoin', async () => {
     const address = 'BITCOIN:1andreas3batLhQa2FawWjeyjCqyBzypd';
-    const result = parseInput(address);
-    expect(result?.type).toEqual('bitcoinAddress');
-    expect(result?.data).toEqual({
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
     });
   });
 
-  it('lowercase bitcoin', () => {
+  it('lowercase bitcoin', async () => {
     const address = 'bitcoin:1andreas3batLhQa2FawWjeyjCqyBzypd';
 
-    const result = parseInput(address);
-    expect(result?.type).toEqual('bitcoinAddress');
-    expect(result?.data).toEqual({
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
     });
   });
 
-  it('bitcoin with amount', () => {
+  it('bitcoin with amount', async () => {
     const address = 'bitcoin:1andreas3batLhQa2FawWjeyjCqyBzypd?amount=0.00002000';
-    const result = parseInput(address);
-    expect(result?.type).toEqual('bitcoinAddress');
-    expect(result?.data).toEqual({
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
       amount: '0.00002000',
     });
   });
-  it('bitcoin with label', () => {
+  it('bitcoin with label', async () => {
     const address = 'bitcoin:1andreas3batLhQa2FawWjeyjCqyBzypd?amount=0.00002000&label=Hello';
-    const result = parseInput(address);
-    expect(result?.type).toEqual('bitcoinAddress');
-    expect(result?.data).toEqual({
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
       amount: '0.00002000',
       label: 'Hello',
     });
   });
 
-  it('bitcoin with label and message', () => {
+  it('bitcoin with label and message', async () => {
     const address = 'bitcoin:1andreas3batLhQa2FawWjeyjCqyBzypd?amount=0.00002000&label=Hello&message=Msg';
-    const result = parseInput(address);
-    expect(result?.type).toEqual('bitcoinAddress');
-    expect(result?.data).toEqual({
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
       amount: '0.00002000',
       label: 'Hello',
@@ -130,11 +155,13 @@ describe('bip21 bitcoin addresses', () => {
     });
   });
 
-  it('bitcoin with label and message upper', () => {
+  it('bitcoin with label and message upper', async () => {
     const address = 'BITCOIN:1andreas3batLhQa2FawWjeyjCqyBzypd?amount=0.00002000&label=Hello&message=Msg';
-    const result = parseInput(address);
-    expect(result?.type).toEqual('bitcoinAddress');
-    expect(result?.data).toEqual({
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bitcoinAddress');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
       amount: '0.00002000',
       label: 'Hello',
@@ -142,13 +169,168 @@ describe('bip21 bitcoin addresses', () => {
     });
   });
 
-  it('bitcoin with lightning', () => {
+  it('bitcoin with lightning LNURL', async () => {
     const address =
       'bitcoin:bc1qhr8mncfw3q7lr8f0fxj08lggm5l8s80ahzm5tl?amount=0.00000021&lightning=lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk';
-    const result = parseInput(address);
-    expect(result?.type).toEqual('lightningAddress');
-    expect(result?.data).toEqual({
-      address: 'lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk',
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('payRequest');
+
+    if (result && 'data' in result) {
+      expect(result.data.address).toEqual('lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk');
+      if ('tag' in result.data) {
+        expect(result.data.tag).toEqual('payRequest');
+      }
+      if ('domain' in result.data) {
+        expect(result.data.domain).toEqual('coinos.io');
+      }
+      if ('minSendable' in result.data) {
+        expect(result.data.minSendable).toEqual(1000);
+      }
+      if ('maxSendable' in result.data) {
+        expect(result.data.maxSendable).toEqual(1000000000000);
+      }
+      if ('commentAllowed' in result.data) {
+        expect(result.data.commentAllowed).toEqual(512);
+      }
+
+      if ('callback' in result.data) {
+        expect(result.data.callback).toBeDefined();
+      }
+    }
+  });
+
+  it('bitcoin with lightning bolt11', async () => {
+    const address =
+      'bitcoin:bc1qhr8mncfw3q7lr8f0fxj08lggm5l8s80ahzm5tl?amount=0.00000021&lightning=lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bolt11Address');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz',
+      expire_time: 604800,
+      description: '',
+      payment_hash: '2044f2c86d384a58c27274f7a3e037aa56e0a95fcc6a66d4674ae01742e6bee7',
+      amountSat: 11,
     });
+  });
+});
+
+describe('bolt11 invoices', () => {
+  it('none', async () => {
+    const address =
+      'lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bolt11Address');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz',
+      expire_time: 604800,
+      description: '',
+      payment_hash: '2044f2c86d384a58c27274f7a3e037aa56e0a95fcc6a66d4674ae01742e6bee7',
+      amountSat: 11,
+    });
+  });
+});
+
+describe('lightning link invoices', () => {
+  it('bolt11', async () => {
+    const address =
+      'lightning:lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('bolt11Address');
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz',
+      expire_time: 604800,
+      description: '',
+      payment_hash: '2044f2c86d384a58c27274f7a3e037aa56e0a95fcc6a66d4674ae01742e6bee7',
+      amountSat: 11,
+    });
+  });
+
+  it('lnurl', async () => {
+    const address = 'lightning:lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('payRequest');
+
+    if (result && 'data' in result) {
+      expect(result.data.address).toEqual('lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk');
+      if ('tag' in result.data) {
+        expect(result.data.tag).toEqual('payRequest');
+      }
+      if ('domain' in result.data) {
+        expect(result.data.domain).toEqual('coinos.io');
+      }
+      if ('minSendable' in result.data) {
+        expect(result.data.minSendable).toEqual(1000);
+      }
+      if ('maxSendable' in result.data) {
+        expect(result.data.maxSendable).toEqual(1000000000000);
+      }
+      if ('commentAllowed' in result.data) {
+        expect(result.data.commentAllowed).toEqual(512);
+      }
+
+      if ('callback' in result.data) {
+        expect(result.data.callback).toBeDefined();
+      }
+    }
+  });
+});
+
+describe('LNURL invoices', () => {
+  it('pay', async () => {
+    const address = 'lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('payRequest');
+
+    if (result && 'data' in result) {
+      expect(result.data.address).toEqual('lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk');
+      if ('tag' in result.data) {
+        expect(result.data.tag).toEqual('payRequest');
+      }
+      if ('domain' in result.data) {
+        expect(result.data.domain).toEqual('coinos.io');
+      }
+      if ('minSendable' in result.data) {
+        expect(result.data.minSendable).toEqual(1000);
+      }
+      if ('maxSendable' in result.data) {
+        expect(result.data.maxSendable).toEqual(1000000000000);
+      }
+      if ('commentAllowed' in result.data) {
+        expect(result.data.commentAllowed).toEqual(512);
+      }
+
+      if ('callback' in result.data) {
+        expect(result.data.callback).toBeDefined();
+      }
+    }
+  });
+
+  it('login', async () => {
+    const address =
+      'LNURL1DP68GURN8GHJ7MRFVA58GMNFDENKCMM8D9HZUMRFWEJJ7MR0VA5KU0MTXY7NVCMY8PJNJC33VD3XXWFEV9NRWCTZXVMNVD33X4SKZDFJXE3NYVNP893NGCFJXAJXVDESVCUNVDE48QMRJEPKXVENXENPV43KYWP3VSN8GCT884KX7EMFDCDFKVAC';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual('login');
+
+    if (result && 'data' in result) {
+      expect(result.data.address).toEqual(
+        'LNURL1DP68GURN8GHJ7MRFVA58GMNFDENKCMM8D9HZUMRFWEJJ7MR0VA5KU0MTXY7NVCMY8PJNJC33VD3XXWFEV9NRWCTZXVMNVD33X4SKZDFJXE3NYVNP893NGCFJXAJXVDESVCUNVDE48QMRJEPKXVENXENPV43KYWP3VSN8GCT884KX7EMFDCDFKVAC',
+      );
+      if ('tag' in result.data) {
+        expect(result.data.tag).toEqual('login');
+      }
+      if ('domain' in result.data) {
+        expect(result.data.domain).toEqual('lightninglogin.live');
+      }
+    }
   });
 });
