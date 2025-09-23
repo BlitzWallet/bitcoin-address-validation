@@ -90,6 +90,7 @@ async function parseLNURL(address: string): Promise<ParsedLNURLData | false> {
             tag: params.tag,
             k1: params.k1,
             callback: params.callback,
+            url: params.callback,
             domain: params.domain,
           } as LoginRequest,
         };

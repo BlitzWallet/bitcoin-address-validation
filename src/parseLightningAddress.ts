@@ -7,8 +7,8 @@ async function parseLightningAddress(address: string) {
       return {
         type: 'bolt11Address',
         data: {
-          address: address,
           ...isBolt11,
+          address: address,
         },
       };
     }
