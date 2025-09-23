@@ -37,10 +37,10 @@ yarn add bitcoin-address-parser
 ## Usage
 
 ```js
-import { parseAddress } from "bitcoin-address-parser";
+import { parseAddress } from 'bitcoin-address-parser';
 
 // Example 1: On-chain Bitcoin address
-const result1 = parseAddress("bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kygt080");
+const result1 = parseAddress('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kygt080');
 console.log(result1);
 /*
 {
@@ -52,7 +52,7 @@ console.log(result1);
 */
 
 // Example 2: BOLT11 invoice
-const result2 = parseAddress("lnbc2500u1p0...");
+const result2 = parseAddress('lnbc2500u1p0...');
 console.log(result2);
 /*
 {
@@ -69,7 +69,7 @@ console.log(result2);
 */
 
 // Example 3: LNURL
-const result3 = parseAddress("lnurl1dp68gurn8...");
+const result3 = parseAddress('lnurl1dp68gurn8...');
 console.log(result3);
 /*
 {
@@ -81,7 +81,7 @@ console.log(result3);
 */
 
 // Example 4: Bitcoin URI
-const result4 = parseAddress("bitcoin:bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh?amount=0.001");
+const result4 = parseAddress('bitcoin:bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh?amount=0.001');
 console.log(result4);
 /*
 {
@@ -93,12 +93,13 @@ console.log(result4);
 }
 */
 ```
+
 ---
 
 ## Contributing
 
 Contributions, issues, and feature requests are welcome!  
-Feel free to open a PR or submit an issue on [GitHub](../../issues).
+Feel free to open a PR or submit an issue on [GitHub](https://github.com/BlitzWallet/bitcoin-address-validation/issues).
 
 ---
 
