@@ -27,8 +27,7 @@
     "check-exports": "attw --pack . --ignore-rules=cjs-resolves-to-esm",
     "lint": "tsc --noEmit",
     "ci": "pnpm run build && pnpm run check-format && pnpm run check-exports && pnpm run lint && pnpm run test",
-    "local-release": "changeset version && changeset publish",
-    "prepublishOnly": "pnpm run ci"
+    "local-release": "changeset version && changeset publish"
   },
   "keywords": [
     "address",
@@ -40,8 +39,8 @@
     "bolt11",
     "uri"
   ],
-  "author": "Blake Kaufman <blake@blitz-wallet.com> (https://blitzwalletapp.com)",
-  "license": "MIT",
+  "author": "Blake Kaufman <blake@blitzwalletapp.com> (https://blitzwalletapp.com)",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/blitzwallet/bitcoin-address-parser.git"
