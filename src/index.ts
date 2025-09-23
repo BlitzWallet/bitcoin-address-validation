@@ -8,7 +8,7 @@ async function parseInput(input: string) {
     // is plain Bitcoin address
     if (isBitcoinAddress(input)) {
       return {
-        type: 'bitcoinAddress',
+        type: InputTypes.BITCOIN_ADDRESS,
         data: {
           address: input,
         },
@@ -33,7 +33,7 @@ async function parseInput(input: string) {
       const address = bitcoinDecoded && bitcoinDecoded.address ? bitcoinDecoded.address : '';
       if (isBitcoinAddress(address)) {
         return {
-          type: 'bitcoinAddress',
+          type: InputTypes.BITCOIN_ADDRESS,
           data: {
             address,
             ...data,
