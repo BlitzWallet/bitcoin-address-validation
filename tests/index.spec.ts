@@ -15,7 +15,7 @@ function encodeLnurl(url: string): string {
   return bech32.encode('lnurl', words, 1023);
 }
 
-describe('plain bitcoin addresses', () => {
+describe('bitcoin addresses', () => {
   it('validates Mainnet P2PKH', async () => {
     const address = '17VZNX1SN5NtKa8UQFxwQbFeFc3iqRYhem';
 
@@ -245,7 +245,7 @@ describe('bip21 bitcoin addresses', async () => {
 });
 
 describe('bolt11 invoices', () => {
-  it('none', async () => {
+  it('bolt11 lower', async () => {
     const address =
       'lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz';
     const result = await parseInput(address);
@@ -254,6 +254,23 @@ describe('bolt11 invoices', () => {
     expect(result && 'data' in result ? result.data : undefined).toEqual({
       address:
         'lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz',
+      expiry: 604800,
+      description: '',
+      payment_hash: '2044f2c86d384a58c27274f7a3e037aa56e0a95fcc6a66d4674ae01742e6bee7',
+      amountSat: 11,
+      amountMsat: 11000,
+      timestamp: 1651524875,
+    });
+  });
+  it('bolt11 upper', async () => {
+    const address =
+      'LNBC110N1P38Q3GTPP5YPZ09JRD8P993SNJWNM68CPH4FTWP22LE34XD4R8FTSPWSHXHMNSDQQXQYJW5QCQPXSP5HTLG8YDPYWVSA7H3U4HDN77EHS4Z4E844EM0APJYVMQFKZQHHD2Q9QGSQQQYSSQSZPXZXT9UUQZYMR7ZXCDCCJ5G69S8Q7ZZJS7SGXN9EJHNVDH6GQJCY22MSS2YEXUNAGM5R2GQCZH8K24CWRQML3NJSKM548ARUHPWSSQ9NVRVZ';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BOLT11);
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'LNBC110N1P38Q3GTPP5YPZ09JRD8P993SNJWNM68CPH4FTWP22LE34XD4R8FTSPWSHXHMNSDQQXQYJW5QCQPXSP5HTLG8YDPYWVSA7H3U4HDN77EHS4Z4E844EM0APJYVMQFKZQHHD2Q9QGSQQQYSSQSZPXZXT9UUQZYMR7ZXCDCCJ5G69S8Q7ZZJS7SGXN9EJHNVDH6GQJCY22MSS2YEXUNAGM5R2GQCZH8K24CWRQML3NJSKM548ARUHPWSSQ9NVRVZ',
       expiry: 604800,
       description: '',
       payment_hash: '2044f2c86d384a58c27274f7a3e037aa56e0a95fcc6a66d4674ae01742e6bee7',
@@ -282,9 +299,180 @@ describe('lightning link invoices', () => {
       timestamp: 1651524875,
     });
   });
+  it('bolt11 upper with lightning', async () => {
+    const address =
+      'lightning:LNBC110N1P38Q3GTPP5YPZ09JRD8P993SNJWNM68CPH4FTWP22LE34XD4R8FTSPWSHXHMNSDQQXQYJW5QCQPXSP5HTLG8YDPYWVSA7H3U4HDN77EHS4Z4E844EM0APJYVMQFKZQHHD2Q9QGSQQQYSSQSZPXZXT9UUQZYMR7ZXCDCCJ5G69S8Q7ZZJS7SGXN9EJHNVDH6GQJCY22MSS2YEXUNAGM5R2GQCZH8K24CWRQML3NJSKM548ARUHPWSSQ9NVRVZ';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BOLT11);
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'LNBC110N1P38Q3GTPP5YPZ09JRD8P993SNJWNM68CPH4FTWP22LE34XD4R8FTSPWSHXHMNSDQQXQYJW5QCQPXSP5HTLG8YDPYWVSA7H3U4HDN77EHS4Z4E844EM0APJYVMQFKZQHHD2Q9QGSQQQYSSQSZPXZXT9UUQZYMR7ZXCDCCJ5G69S8Q7ZZJS7SGXN9EJHNVDH6GQJCY22MSS2YEXUNAGM5R2GQCZH8K24CWRQML3NJSKM548ARUHPWSSQ9NVRVZ',
+      expiry: 604800,
+      description: '',
+      payment_hash: '2044f2c86d384a58c27274f7a3e037aa56e0a95fcc6a66d4674ae01742e6bee7',
+      amountSat: 11,
+      amountMsat: 11000,
+      timestamp: 1651524875,
+    });
+  });
+  it('bolt11 lower with lightning upper', async () => {
+    const address =
+      'LIGHTNING:lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BOLT11);
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'lnbc110n1p38q3gtpp5ypz09jrd8p993snjwnm68cph4ftwp22le34xd4r8ftspwshxhmnsdqqxqyjw5qcqpxsp5htlg8ydpywvsa7h3u4hdn77ehs4z4e844em0apjyvmqfkzqhhd2q9qgsqqqyssqszpxzxt9uuqzymr7zxcdccj5g69s8q7zzjs7sgxn9ejhnvdh6gqjcy22mss2yexunagm5r2gqczh8k24cwrqml3njskm548aruhpwssq9nvrvz',
+      expiry: 604800,
+      description: '',
+      payment_hash: '2044f2c86d384a58c27274f7a3e037aa56e0a95fcc6a66d4674ae01742e6bee7',
+      amountSat: 11,
+      amountMsat: 11000,
+      timestamp: 1651524875,
+    });
+  });
+  it('bolt11 upper with lightning upper', async () => {
+    const address =
+      'LIGHTNING:LNBC110N1P38Q3GTPP5YPZ09JRD8P993SNJWNM68CPH4FTWP22LE34XD4R8FTSPWSHXHMNSDQQXQYJW5QCQPXSP5HTLG8YDPYWVSA7H3U4HDN77EHS4Z4E844EM0APJYVMQFKZQHHD2Q9QGSQQQYSSQSZPXZXT9UUQZYMR7ZXCDCCJ5G69S8Q7ZZJS7SGXN9EJHNVDH6GQJCY22MSS2YEXUNAGM5R2GQCZH8K24CWRQML3NJSKM548ARUHPWSSQ9NVRVZ';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BOLT11);
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'LNBC110N1P38Q3GTPP5YPZ09JRD8P993SNJWNM68CPH4FTWP22LE34XD4R8FTSPWSHXHMNSDQQXQYJW5QCQPXSP5HTLG8YDPYWVSA7H3U4HDN77EHS4Z4E844EM0APJYVMQFKZQHHD2Q9QGSQQQYSSQSZPXZXT9UUQZYMR7ZXCDCCJ5G69S8Q7ZZJS7SGXN9EJHNVDH6GQJCY22MSS2YEXUNAGM5R2GQCZH8K24CWRQML3NJSKM548ARUHPWSSQ9NVRVZ',
+      expiry: 604800,
+      description: '',
+      payment_hash: '2044f2c86d384a58c27274f7a3e037aa56e0a95fcc6a66d4674ae01742e6bee7',
+      amountSat: 11,
+      amountMsat: 11000,
+      timestamp: 1651524875,
+    });
+  });
 
   it('lnurl', async () => {
     const address = 'lightning:lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk';
+
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://blitzwalletapp/lnurl/cb',
+      minSendable: 1000,
+      maxSendable: 1000000000000,
+      metadata: '[["text/plain","LNURL Lightning Link"]]',
+      commentAllowed: 512,
+      domain: 'blitzwalletapp',
+    };
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.LNURL_PAY);
+
+    if (result && 'data' in result) {
+      expect(result.data.address).toEqual('lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk');
+      if ('tag' in result.data) {
+        expect(result.data.tag).toEqual(InputTypes.LNURL_PAY);
+      }
+      if ('domain' in result.data) {
+        expect(result.data.domain).toEqual('blitzwalletapp');
+      }
+      if ('minSendable' in result.data) {
+        expect(result.data.minSendable).toEqual(1000);
+      }
+      if ('maxSendable' in result.data) {
+        expect(result.data.maxSendable).toEqual(1000000000000);
+      }
+      if ('commentAllowed' in result.data) {
+        expect(result.data.commentAllowed).toEqual(512);
+      }
+
+      if ('callback' in result.data) {
+        expect(result.data.callback).toBeDefined();
+      }
+    }
+  });
+  it('lnurl upper', async () => {
+    const address = 'lightning:LNURL1DP68GURN8GHJ7CM0D9HX7UEWD9HJ7UP0VFHKYSUZMTK';
+
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://blitzwalletapp/lnurl/cb',
+      minSendable: 1000,
+      maxSendable: 1000000000000,
+      metadata: '[["text/plain","LNURL Lightning Link"]]',
+      commentAllowed: 512,
+      domain: 'blitzwalletapp',
+    };
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.LNURL_PAY);
+
+    if (result && 'data' in result) {
+      expect(result.data.address).toEqual('LNURL1DP68GURN8GHJ7CM0D9HX7UEWD9HJ7UP0VFHKYSUZMTK');
+      if ('tag' in result.data) {
+        expect(result.data.tag).toEqual(InputTypes.LNURL_PAY);
+      }
+      if ('domain' in result.data) {
+        expect(result.data.domain).toEqual('blitzwalletapp');
+      }
+      if ('minSendable' in result.data) {
+        expect(result.data.minSendable).toEqual(1000);
+      }
+      if ('maxSendable' in result.data) {
+        expect(result.data.maxSendable).toEqual(1000000000000);
+      }
+      if ('commentAllowed' in result.data) {
+        expect(result.data.commentAllowed).toEqual(512);
+      }
+
+      if ('callback' in result.data) {
+        expect(result.data.callback).toBeDefined();
+      }
+    }
+  });
+  it('lnurl upper lightning upper', async () => {
+    const address = 'LIGHTNING:LNURL1DP68GURN8GHJ7CM0D9HX7UEWD9HJ7UP0VFHKYSUZMTK';
+
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://blitzwalletapp/lnurl/cb',
+      minSendable: 1000,
+      maxSendable: 1000000000000,
+      metadata: '[["text/plain","LNURL Lightning Link"]]',
+      commentAllowed: 512,
+      domain: 'blitzwalletapp',
+    };
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.LNURL_PAY);
+
+    if (result && 'data' in result) {
+      expect(result.data.address).toEqual('LNURL1DP68GURN8GHJ7CM0D9HX7UEWD9HJ7UP0VFHKYSUZMTK');
+      if ('tag' in result.data) {
+        expect(result.data.tag).toEqual(InputTypes.LNURL_PAY);
+      }
+      if ('domain' in result.data) {
+        expect(result.data.domain).toEqual('blitzwalletapp');
+      }
+      if ('minSendable' in result.data) {
+        expect(result.data.minSendable).toEqual(1000);
+      }
+      if ('maxSendable' in result.data) {
+        expect(result.data.maxSendable).toEqual(1000000000000);
+      }
+      if ('commentAllowed' in result.data) {
+        expect(result.data.commentAllowed).toEqual(512);
+      }
+
+      if ('callback' in result.data) {
+        expect(result.data.callback).toBeDefined();
+      }
+    }
+  });
+  it('lnurl lower lightning upper', async () => {
+    const address = 'LIGHTNING:lnurl1dp68gurn8ghj7cm0d9hx7uewd9hj7up0vfhkysuzmtk';
 
     mockGetLnurlParams = {
       tag: 'payRequest',
