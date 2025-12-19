@@ -1,5 +1,9 @@
 # bitcoin-address-validation
 
+## 1.0.3
+
+- fixing bolt11 invoice amount bug
+
 ## 1.0.2
 
 - adding react-native entry point
