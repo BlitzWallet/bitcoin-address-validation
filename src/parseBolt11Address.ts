@@ -14,10 +14,30 @@ function parseBolt11(address: string): CleanBolt11Data | false {
     const decoded = bolt11.decode(address);
 
     console.log(decoded);
+    const hasSatsInInvoice = !!decoded.satoshis;
 
-    // Extract sat value - use satoshis directly (already in sats, not millisats)
-    const amountSat = (decoded.satoshis as number) || 0;
-    const amountMsat = amountSat * 1000 || 0;
+    // Extract sat value
+    let amountSat = 0;
+    let amountMsat = 0;
+    if (hasSatsInInvoice) {
+      amountSat =
+        (typeof decoded.satoshis === 'string' ? parseInt(decoded.satoshis, 10) : (decoded.satoshis as number)) || 0;
+      amountMsat = amountSat * 1000 || 0;
+    } else {
+      const millisRaw = decoded.millisatoshis as unknown;
+      let millisNum = 0;
+      if (typeof millisRaw === 'string') {
+        const parsed = parseInt(millisRaw, 10);
+        millisNum = Number.isNaN(parsed) ? 0 : parsed;
+      } else if (typeof millisRaw === 'number') {
+        millisNum = millisRaw;
+      } else {
+        millisNum = 0;
+      }
+
+      amountSat = Math.round((millisNum || 0) / 1000);
+      amountMsat = millisNum;
+    }
 
     // Extract payment_hash
     const paymentHashTag = decoded.tags?.find((tag) => tag.tagName === 'payment_hash');

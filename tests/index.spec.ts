@@ -262,6 +262,23 @@ describe('bolt11 invoices', () => {
       timestamp: 1651524875,
     });
   });
+  it('bolt11 no sats property', async () => {
+    const address =
+      'lnbc26887810p1p55txnvpp5rjh55up4367dx24v0ksm0w0v023nwz37rfxuzdmhvx923007dflqcqzyssp5z9yf7z78la7vunh4x4gxfwta0vehf99xgk35ykken0xx8k5nq78q9q7sqqqqqqqqqqqqqqqqqqqsqqqqqysgqdq87z06hggmqz9gxqyjw5qrzjqwryaup9lh50kkranzgcdnn2fgvx390wgj5jd07rwr3vxeje0glcllmqrcrlqsaqncqqqqlgqqqqqeqqjqvekmjf0ds87ugs5k2xavg0klhqu72xpnzg2t6fnn5uz78n3rjclr0439gkmhja56qwm3vznjrdqjn8s4988vcr8s07mt2j2zd39kmcsq9xrgz5';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BOLT11);
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'lnbc26887810p1p55txnvpp5rjh55up4367dx24v0ksm0w0v023nwz37rfxuzdmhvx923007dflqcqzyssp5z9yf7z78la7vunh4x4gxfwta0vehf99xgk35ykken0xx8k5nq78q9q7sqqqqqqqqqqqqqqqqqqqsqqqqqysgqdq87z06hggmqz9gxqyjw5qrzjqwryaup9lh50kkranzgcdnn2fgvx390wgj5jd07rwr3vxeje0glcllmqrcrlqsaqncqqqqlgqqqqqeqqjqvekmjf0ds87ugs5k2xavg0klhqu72xpnzg2t6fnn5uz78n3rjclr0439gkmhja56qwm3vznjrdqjn8s4988vcr8s07mt2j2zd39kmcsq9xrgz5',
+      expiry: 604800,
+      description: '🫡',
+      payment_hash: '1caf4a70358ebcd32aac7da1b7b9ec7aa3370a3e1a4dc13777618aa8bdfe6a7e',
+      amountSat: 2689,
+      amountMsat: 2688781,
+      timestamp: 1766169196,
+    });
+  });
   it('bolt11 upper', async () => {
     const address =
       'LNBC110N1P38Q3GTPP5YPZ09JRD8P993SNJWNM68CPH4FTWP22LE34XD4R8FTSPWSHXHMNSDQQXQYJW5QCQPXSP5HTLG8YDPYWVSA7H3U4HDN77EHS4Z4E844EM0APJYVMQFKZQHHD2Q9QGSQQQYSSQSZPXZXT9UUQZYMR7ZXCDCCJ5G69S8Q7ZZJS7SGXN9EJHNVDH6GQJCY22MSS2YEXUNAGM5R2GQCZH8K24CWRQML3NJSKM548ARUHPWSSQ9NVRVZ';
