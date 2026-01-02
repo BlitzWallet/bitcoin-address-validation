@@ -1,5 +1,9 @@
 # bitcoin-address-validation
 
+## 1.0.4
+
+- Adding more info to Bitcoin addresses
+
 ## 1.0.3
 
 - fixing bolt11 invoice amount bug
