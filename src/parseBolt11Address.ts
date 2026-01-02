@@ -13,7 +13,6 @@ function parseBolt11(address: string): CleanBolt11Data | false {
   try {
     const decoded = bolt11.decode(address);
 
-    console.log(decoded);
     const hasSatsInInvoice = !!decoded.satoshis;
 
     // Extract sat value

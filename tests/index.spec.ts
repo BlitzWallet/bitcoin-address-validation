@@ -106,6 +106,9 @@ describe('bip21 bitcoin addresses', async () => {
     expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BITCOIN_ADDRESS);
     expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+      bech32: false,
+      network: 'mainnet',
+      type: 'p2pkh',
     });
   });
 
@@ -117,6 +120,9 @@ describe('bip21 bitcoin addresses', async () => {
     expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BITCOIN_ADDRESS);
     expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+      bech32: false,
+      network: 'mainnet',
+      type: 'p2pkh',
     });
   });
 
@@ -128,6 +134,9 @@ describe('bip21 bitcoin addresses', async () => {
     expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BITCOIN_ADDRESS);
     expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
+      bech32: false,
+      network: 'mainnet',
+      type: 'p2pkh',
     });
   });
 
@@ -140,6 +149,9 @@ describe('bip21 bitcoin addresses', async () => {
     expect(result && 'data' in result ? result.data : undefined).toEqual({
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
       amount: '0.00002000',
+      bech32: false,
+      network: 'mainnet',
+      type: 'p2pkh',
     });
   });
   it('bitcoin with label', async () => {
@@ -152,6 +164,9 @@ describe('bip21 bitcoin addresses', async () => {
       address: '1andreas3batLhQa2FawWjeyjCqyBzypd',
       amount: '0.00002000',
       label: 'Hello',
+      bech32: false,
+      network: 'mainnet',
+      type: 'p2pkh',
     });
   });
 
@@ -166,6 +181,9 @@ describe('bip21 bitcoin addresses', async () => {
       amount: '0.00002000',
       label: 'Hello',
       message: 'Msg',
+      bech32: false,
+      network: 'mainnet',
+      type: 'p2pkh',
     });
   });
 
@@ -180,6 +198,9 @@ describe('bip21 bitcoin addresses', async () => {
       amount: '0.00002000',
       label: 'Hello',
       message: 'Msg',
+      bech32: false,
+      network: 'mainnet',
+      type: 'p2pkh',
     });
   });
 

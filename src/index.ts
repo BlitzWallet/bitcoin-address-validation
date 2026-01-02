@@ -1,15 +1,17 @@
 import { EMAIL_REGEX, InputTypes, WEBSITE_REGEX } from './constants.js';
 import { parseBip21Addressess } from './handleBip21Addresses.js';
-import { isBitcoinAddress } from './parseBitcoinAddress.js';
+import { getAddressInfo, isBitcoinAddress } from './parseBitcoinAddress.js';
 import { parseLightningAddress } from './parseLightningAddress.js';
 
 async function parseInput(input: string) {
   try {
     // is plain Bitcoin address
     if (isBitcoinAddress(input)) {
+      const info = getAddressInfo(input);
       return {
         type: InputTypes.BITCOIN_ADDRESS,
         data: {
+          ...info,
           address: input,
         },
       };
@@ -32,9 +34,11 @@ async function parseInput(input: string) {
       const data = bitcoinDecoded && bitcoinDecoded.options ? bitcoinDecoded.options : {};
       const address = bitcoinDecoded && bitcoinDecoded.address ? bitcoinDecoded.address : '';
       if (isBitcoinAddress(address)) {
+        const info = getAddressInfo(address);
         return {
           type: InputTypes.BITCOIN_ADDRESS,
           data: {
+            ...info,
             address,
             ...data,
             amount: data.amount?.toFixed(8),
@@ -59,7 +63,7 @@ async function parseInput(input: string) {
     // bolt11 resposne
     if (input.toLowerCase().startsWith('lnbc')) {
       const lightningParse = await parseLightningAddress(input);
-      console.log(lightningParse);
+
       if (lightningParse) {
         return lightningParse;
       } else throw new Error('Invalid lightning argument');
@@ -67,7 +71,7 @@ async function parseInput(input: string) {
 
     if (input.toLowerCase().startsWith('lnurl')) {
       const lightningParse = await parseLightningAddress(input);
-      console.log(lightningParse);
+
       if (lightningParse) {
         return lightningParse;
       } else throw new Error('Invalid lightning argument');
@@ -75,7 +79,7 @@ async function parseInput(input: string) {
 
     if (EMAIL_REGEX.test(input.toLowerCase())) {
       const lightningParse = await parseLightningAddress(input);
-      console.log(lightningParse);
+
       if (lightningParse) {
         return lightningParse;
       } else throw new Error('Invalid lightning argument');
@@ -87,7 +91,7 @@ async function parseInput(input: string) {
       const lightningInvoiceAsQuery = params.get('lightning');
 
       const lightningParse = await parseLightningAddress(lightningInvoiceAsQuery ? lightningInvoiceAsQuery : input);
-      console.log(lightningParse);
+
       if (lightningParse) {
         return lightningParse;
       } else throw new Error('Invalid lightning argument');
