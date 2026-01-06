@@ -315,6 +315,25 @@ describe('bolt11 invoices', () => {
       amountSat: 11,
       amountMsat: 11000,
       timestamp: 1651524875,
+      usingSparkAddress: undefined,
+    });
+  });
+  it('bolt11 with spark address', async () => {
+    const address =
+      'lnbc50n1p546ma3pp5ehexmfzlc86n5wr3q2vwc002kzgnmag3dypwj2tesjqxg4pjg0tqsp5rjgsef63g27lw4naucyvvveq9tdteeu8pevvqrkxf463vrlxg8dsxqyp2xqnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjq25carzepgd4vqsyn44jrk85ezrpju92xyrk9apw4cdjh6yrwt5jgqqqqrt49lmtcqqqqqqqqqqq86qq9qrzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qrzjq0w2yzg9y7mtaswxj4659r5j4rjjhhk6g28nm5764q7jq05vpyvl8apyqr6zgqqqq8hxk2qqae4jsqyugqcqzpgdqq9qyyssq3fjsdkhdj7xwtafuty65jc26h09guf2zn2jfjt36ayz38j776y3xl37g7dl0xzvggjaatttluyhnk3s86xlxjfpssjdc0757dp03j3cqrd886u';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BOLT11);
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'lnbc50n1p546ma3pp5ehexmfzlc86n5wr3q2vwc002kzgnmag3dypwj2tesjqxg4pjg0tqsp5rjgsef63g27lw4naucyvvveq9tdteeu8pevvqrkxf463vrlxg8dsxqyp2xqnp4qvyndeaqzman7h898jxm98dzkm0mlrsx36s93smrur7h0azyyuxc5rzjq25carzepgd4vqsyn44jrk85ezrpju92xyrk9apw4cdjh6yrwt5jgqqqqrt49lmtcqqqqqqqqqqq86qq9qrzjqwghf7zxvfkxq5a6sr65g0gdkv768p83mhsnt0msszapamzx2qvuxqqqqrt49lmtcqqqqqqqqqqq86qq9qrzjq0w2yzg9y7mtaswxj4659r5j4rjjhhk6g28nm5764q7jq05vpyvl8apyqr6zgqqqq8hxk2qqae4jsqyugqcqzpgdqq9qyyssq3fjsdkhdj7xwtafuty65jc26h09guf2zn2jfjt36ayz38j776y3xl37g7dl0xzvggjaatttluyhnk3s86xlxjfpssjdc0757dp03j3cqrd886u',
+      expiry: 43200,
+      description: '',
+      payment_hash: 'cdf26da45fc1f53a38710298ec3deab0913df5116902e92979848064543243d6',
+      amountSat: 5,
+      amountMsat: 5000,
+      timestamp: 1767731121,
+      usingSparkAddress: '03dca2090527b6bec1c69575428e92a8e52bdeda428f3dd3daa83d203e8c0919f3',
     });
   });
 });

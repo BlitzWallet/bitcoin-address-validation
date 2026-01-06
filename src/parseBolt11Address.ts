@@ -1,5 +1,7 @@
 import * as bolt11 from 'bolt11';
 
+const RECEIVER_IDENTITY_PUBLIC_KEY_SHORT_CHANNEL_ID = 'f42400f424000001';
+
 interface CleanBolt11Data {
   amountSat: number;
   amountMsat: number;
@@ -7,6 +9,7 @@ interface CleanBolt11Data {
   payment_hash: string;
   description: string;
   timestamp: number;
+  usingSparkAddress: string | undefined;
 }
 
 function parseBolt11(address: string): CleanBolt11Data | false {
@@ -14,6 +17,37 @@ function parseBolt11(address: string): CleanBolt11Data | false {
     const decoded = bolt11.decode(address);
 
     const hasSatsInInvoice = !!decoded.satoshis;
+
+    let usingSparkAddress: string | undefined = undefined;
+    try {
+      if (decoded.tags && Array.isArray(decoded.tags)) {
+        const routingInfoTags = decoded.tags.filter(
+          (item) => item && typeof item === 'object' && item.tagName === 'routing_info',
+        );
+
+        for (const tag of routingInfoTags) {
+          if (tag.data && Array.isArray(tag.data) && tag.data.length > 0) {
+            const firstDataItem = tag.data[0];
+
+            if (
+              firstDataItem &&
+              typeof firstDataItem === 'object' &&
+              'short_channel_id' in firstDataItem &&
+              'pubkey' in firstDataItem
+            ) {
+              if (firstDataItem.short_channel_id === RECEIVER_IDENTITY_PUBLIC_KEY_SHORT_CHANNEL_ID) {
+                if (typeof firstDataItem.pubkey === 'string' && firstDataItem.pubkey.length > 0) {
+                  usingSparkAddress = firstDataItem.pubkey;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.log('Error extracting spark address:', err);
+    }
 
     // Extract sat value
     let amountSat = 0;
@@ -51,7 +85,7 @@ function parseBolt11(address: string): CleanBolt11Data | false {
     const expireTimeTag = decoded.tags?.find((tag) => tag.tagName === 'expire_time');
     const expiry = (expireTimeTag?.data as number) || 0;
 
-    // Extract payment_hash
+    // Extract timestamp
     const timestamp = decoded.timestamp as number;
 
     const cleanData: CleanBolt11Data = {
@@ -61,6 +95,7 @@ function parseBolt11(address: string): CleanBolt11Data | false {
       payment_hash,
       description,
       timestamp,
+      usingSparkAddress,
     };
 
     return cleanData;

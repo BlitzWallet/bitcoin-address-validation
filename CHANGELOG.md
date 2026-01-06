@@ -1,5 +1,9 @@
 # bitcoin-address-validation
 
+## 1.0.5
+
+- Adding logic to extract spark address from bolt11 invoice
+
 ## 1.0.4
 
 - Adding more info to Bitcoin addresses
