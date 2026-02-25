@@ -1,5 +1,9 @@
 # bitcoin-address-validation
 
+## 1.0.6
+
+- bumping lodash to fix security issue
+
 ## 1.0.5
 
 - Adding logic to extract spark address from bolt11 invoice
