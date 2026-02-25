@@ -62,6 +62,9 @@
     "js-lnurl": "^0.6.0",
     "sha256-uint8array": "^0.10.7"
   },
+  "overrides": {
+    "lodash": "4.17.23"
+  },
   "directories": {
     "test": "tests"
   }
