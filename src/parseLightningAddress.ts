@@ -12,6 +12,11 @@ async function parseLightningAddress(address: string) {
         },
       };
     }
+  } catch (err) {
+    // not a bolt11, fall through to LNURL parsing
+  }
+
+  try {
     const isLNURL = await parseLNURL(address);
 
     if (isLNURL) {
@@ -24,7 +29,7 @@ async function parseLightningAddress(address: string) {
       };
     }
   } catch (err) {
-    console.log('error parsing bip21', err);
+    console.log('error parsing LNURL', err);
     return false;
   }
 }

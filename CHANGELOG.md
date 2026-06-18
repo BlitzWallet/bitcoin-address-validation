@@ -1,5 +1,9 @@
 # bitcoin-address-validation
 
+## 1.0.7
+
+- adding lud22
+
 ## 1.0.6
 
 - bumping lodash to fix security issue

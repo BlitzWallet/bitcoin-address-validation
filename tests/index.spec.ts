@@ -777,6 +777,122 @@ describe('LNURL LUDs tests (fake / mocked)', () => {
     }
   });
 
+  it('LNURL Pay (LUD-22) – passes through the currencies array', async () => {
+    const fakeLnurlUrl = encodeLnurl('https://pay.example.com/lnurl/pay?id=lud22');
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://pay.example.com/lnurl/pay/callback?id=lud22',
+      domain: 'pay.example.com',
+      minSendable: 1000,
+      maxSendable: 1000000000,
+      metadata: '[["text/plain","Donate to me"]]',
+      currencies: [
+        {
+          code: 'PHP',
+          name: 'Philippine Peso',
+          symbol: '₱',
+          decimals: 0,
+          multiplier: 26695.55342671,
+        },
+      ],
+    };
+
+    const result = await parseInput(fakeLnurlUrl);
+    if (!result) throw new Error('No parse');
+
+    expect(result.type).toEqual('payRequest');
+    const data = result.data as any;
+    expect(Array.isArray(data.currencies)).toBe(true);
+    expect(data.currencies[0].code).toEqual('PHP');
+    expect(data.currencies[0].multiplier).toEqual(26695.55342671);
+    expect(data.currencies[0].decimals).toEqual(0);
+  });
+
+  it('LNURL Pay – passes through the non-standard single currency object', async () => {
+    const fakeLnurlUrl = encodeLnurl('https://pay.example.com/lnurl/pay?id=zapremit');
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://api.zapremit.com/lnurl/callback/639683698606',
+      domain: 'zapremit.com',
+      minSendable: 500000,
+      maxSendable: 1000000000,
+      metadata: '[["text/plain","Payment for 639683698606"]]',
+      currency: {
+        code: 'PHP',
+        name: 'Philippine Peso',
+        symbol: '₱',
+        minSendable: 30,
+        maxSendable: 50000,
+        multiplier: 26695.55342671,
+      },
+    };
+
+    const result = await parseInput(fakeLnurlUrl);
+    if (!result) throw new Error('No parse');
+
+    expect(result.type).toEqual('payRequest');
+    const data = result.data as any;
+    expect(data.currency.code).toEqual('PHP');
+    expect(data.currency.multiplier).toEqual(26695.55342671);
+    expect(data.currency.minSendable).toEqual(30);
+    expect(data.currency.maxSendable).toEqual(50000);
+    expect(data.currency.decimals).toBeUndefined();
+  });
+
+  it('LNURL Pay – no currency params still parses (backward compatible)', async () => {
+    const fakeLnurlUrl = encodeLnurl('https://pay.example.com/lnurl/pay?id=nocurrency');
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://pay.example.com/lnurl/pay/callback?id=nocurrency',
+      domain: 'pay.example.com',
+      minSendable: 1000,
+      maxSendable: 5000000,
+      metadata: '[["text/plain","Donate to me"]]',
+    };
+
+    const result = await parseInput(fakeLnurlUrl);
+    if (!result) throw new Error('No parse');
+
+    expect(result.type).toEqual('payRequest');
+    const data = result.data as any;
+    expect(data.currency).toBeUndefined();
+    expect(data.currencies).toBeUndefined();
+  });
+
+  it('LNURL Pay – both currency and currencies pass through independently', async () => {
+    const fakeLnurlUrl = encodeLnurl('https://pay.example.com/lnurl/pay?id=both');
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://pay.example.com/lnurl/pay/callback?id=both',
+      domain: 'pay.example.com',
+      minSendable: 1000,
+      maxSendable: 5000000,
+      metadata: '[["text/plain","Donate to me"]]',
+      currency: {
+        code: 'KES',
+        name: 'Kenyan Shilling',
+        symbol: 'KSh',
+        multiplier: 1234.5,
+      },
+      currencies: [
+        {
+          code: 'PHP',
+          name: 'Philippine Peso',
+          symbol: '₱',
+          decimals: 2,
+          multiplier: 26695.55342671,
+        },
+      ],
+    };
+
+    const result = await parseInput(fakeLnurlUrl);
+    if (!result) throw new Error('No parse');
+
+    const data = result.data as any;
+    expect(data.currency.code).toEqual('KES');
+    expect(data.currencies[0].code).toEqual('PHP');
+  });
+
   it('LNURL Withdraw (LUD-03) – parses withdrawRequest correctly', async () => {
     const fakeLnurlUrl = encodeLnurl('https://withdraw.example.com/lnurl/withdraw?id=xyz789');
     mockGetLnurlParams = {

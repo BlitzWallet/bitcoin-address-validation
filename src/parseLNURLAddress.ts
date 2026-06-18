@@ -11,6 +11,24 @@ interface WithdrawRequest {
   defaultDescription: string;
 }
 
+// Currency descriptor advertised by an LNURL pay service.
+// Covers both the LUD-22 standard shape (decimals/convertible) and the
+// non-standard single-object shape used by some providers (e.g. zapremit),
+// which nests its own minSendable/maxSendable and omits decimals.
+interface LNURLCurrency {
+  code: string;
+  name: string;
+  symbol: string;
+  multiplier: number;
+  decimals?: number;
+  convertible?: {
+    max: number;
+    min: number;
+  };
+  minSendable?: number;
+  maxSendable?: number;
+}
+
 interface PayRequest {
   tag: 'payRequest';
   callback: string;
@@ -20,6 +38,8 @@ interface PayRequest {
   metadata: string;
   decodedMetadata: string[][];
   commentAllowed?: number;
+  currency?: LNURLCurrency;
+  currencies?: LNURLCurrency[];
 }
 
 interface LoginRequest {
@@ -80,6 +100,8 @@ async function parseLNURL(address: string): Promise<ParsedLNURLData | false> {
             metadata: params.metadata,
             decodedMetadata: params.decodedMetadata,
             commentAllowed: params.commentAllowed,
+            currency: params.currency,
+            currencies: params.currencies,
           } as PayRequest,
         };
 
@@ -120,4 +142,4 @@ function isLoginRequest(data: ParsedLNURLData): data is ParsedLNURLData & { data
 
 export { parseLNURL, isWithdrawRequest, isPayRequest, isLoginRequest };
 
-export type { ParsedLNURLData, WithdrawRequest, PayRequest, LoginRequest, LNURLParams };
+export type { ParsedLNURLData, WithdrawRequest, PayRequest, LoginRequest, LNURLParams, LNURLCurrency };
