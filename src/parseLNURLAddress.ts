@@ -29,6 +29,19 @@ interface LNURLCurrency {
   maxSendable?: number;
 }
 
+// LUD-18 payerData record: the SERVICE advertises which payer-identity kinds it accepts.
+// Each kind is optional; presence of the key signals acceptance. `auth` also carries a k1
+// challenge. We forward this untouched so the wallet can decide what to attach (e.g. an
+// `identifier` Lightning Address as a refund destination for MoneyBadger merchants).
+interface PayerDataRequest {
+  name?: { mandatory: boolean };
+  pubkey?: { mandatory: boolean };
+  identifier?: { mandatory: boolean };
+  email?: { mandatory: boolean };
+  auth?: { mandatory: boolean; k1: string };
+  [key: string]: { mandatory: boolean; k1?: string } | undefined;
+}
+
 interface PayRequest {
   tag: 'payRequest';
   callback: string;
@@ -38,6 +51,7 @@ interface PayRequest {
   metadata: string;
   decodedMetadata: string[][];
   commentAllowed?: number;
+  payerData?: PayerDataRequest;
   currency?: LNURLCurrency;
   currencies?: LNURLCurrency[];
 }
@@ -100,6 +114,7 @@ async function parseLNURL(address: string): Promise<ParsedLNURLData | false> {
             metadata: params.metadata,
             decodedMetadata: params.decodedMetadata,
             commentAllowed: params.commentAllowed,
+            payerData: params.payerData,
             currency: params.currency,
             currencies: params.currencies,
           } as PayRequest,
@@ -142,4 +157,4 @@ function isLoginRequest(data: ParsedLNURLData): data is ParsedLNURLData & { data
 
 export { parseLNURL, isWithdrawRequest, isPayRequest, isLoginRequest };
 
-export type { ParsedLNURLData, WithdrawRequest, PayRequest, LoginRequest, LNURLParams, LNURLCurrency };
+export type { ParsedLNURLData, WithdrawRequest, PayRequest, LoginRequest, LNURLParams, LNURLCurrency, PayerDataRequest };

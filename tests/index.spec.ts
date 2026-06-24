@@ -938,3 +938,52 @@ describe('LNURL LUDs tests (fake / mocked)', () => {
     }
   });
 });
+
+describe('LUD-18 payerData', () => {
+  it('preserves the payerData record when the service advertises it', async () => {
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://x.com/cb',
+      domain: 'x.com',
+      minSendable: 1000,
+      maxSendable: 100000,
+      metadata: '[["text/plain","Donation"]]',
+      decodedMetadata: [['text/plain', 'Donation']],
+      payerData: {
+        identifier: { mandatory: false },
+        auth: { mandatory: true, k1: 'ab12' },
+      },
+    };
+
+    const result = await parseInput(encodeLnurl('https://x.com/lnurl'));
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.LNURL_PAY);
+
+    if (result && 'data' in result && 'payerData' in result.data) {
+      expect(result.data.payerData?.identifier?.mandatory).toEqual(false);
+      expect(result.data.payerData?.auth?.k1).toEqual('ab12');
+    } else {
+      throw new Error('payerData was dropped from the parsed payRequest');
+    }
+  });
+
+  it('leaves payerData undefined when the service does not advertise it', async () => {
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://x.com/cb',
+      domain: 'x.com',
+      minSendable: 1000,
+      maxSendable: 100000,
+      metadata: '[["text/plain","Donation"]]',
+      decodedMetadata: [['text/plain', 'Donation']],
+    };
+
+    const result = await parseInput(encodeLnurl('https://x.com/lnurl'));
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.LNURL_PAY);
+
+    if (result && 'data' in result && 'payerData' in result.data) {
+      expect(result.data.payerData).toBeUndefined();
+    }
+  });
+});

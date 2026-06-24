@@ -1,5 +1,9 @@
 # bitcoin-address-validation
 
+## 1.0.8
+
+- adding lud18
+
 ## 1.0.7
 
 - adding lud22
