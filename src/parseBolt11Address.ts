@@ -1,4 +1,4 @@
-import * as bolt11 from 'bolt11';
+import * as bolt11 from 'light-bolt11-decoder';
 
 const RECEIVER_IDENTITY_PUBLIC_KEY_SHORT_CHANNEL_ID = 'f42400f424000001';
 
@@ -12,9 +12,31 @@ interface CleanBolt11Data {
   usingSparkAddress: string | undefined;
 }
 
+// Drop-in replacement for the slice of the `bolt11` package this app used:
+// `.satoshis`, `.millisatoshis`, and `.tags` ([{ tagName, data }], looked up for
+// 'payment_hash' and 'description').
+//
+// satoshis mirrors bolt11 exactly: integer sats when the msat amount is a whole
+// number of sats, otherwise null (and null when the invoice omits an amount).
+function decode(paymentRequest: string) {
+  const { sections } = bolt11.decode(paymentRequest);
+
+  const amount = sections.find((s) => s.name === 'amount');
+  const millisatoshis = amount ? amount.value : null; // string, like bolt11
+  const msat = millisatoshis == null ? null : Number(millisatoshis);
+  const satoshis = msat != null && msat % 1000 === 0 ? msat / 1000 : null;
+
+  type SectionWithValue = (typeof sections)[number] & { value: unknown };
+  const tags = sections
+    .filter((s): s is SectionWithValue => 'value' in s && s.value !== undefined)
+    .map((s) => ({ tagName: s.name, data: s.value }));
+
+  return { paymentRequest, satoshis, millisatoshis, tags };
+}
+
 function parseBolt11(address: string): CleanBolt11Data | false {
   try {
-    const decoded = bolt11.decode(address);
+    const decoded = decode(address);
 
     const hasSatsInInvoice = !!decoded.satoshis;
 
@@ -22,7 +44,7 @@ function parseBolt11(address: string): CleanBolt11Data | false {
     try {
       if (decoded.tags && Array.isArray(decoded.tags)) {
         const routingInfoTags = decoded.tags.filter(
-          (item) => item && typeof item === 'object' && item.tagName === 'routing_info',
+          (item) => item && typeof item === 'object' && item.tagName === 'route_hint',
         );
 
         for (const tag of routingInfoTags) {
@@ -46,7 +68,7 @@ function parseBolt11(address: string): CleanBolt11Data | false {
         }
       }
     } catch (err) {
-      console.log('Error extracting spark address:', err);
+      // Error extracting spark address; ignore and continue
     }
 
     // Extract sat value
@@ -82,11 +104,12 @@ function parseBolt11(address: string): CleanBolt11Data | false {
       typeof descriptionTag?.data === 'string' ? descriptionTag.data : String(descriptionTag?.data || '');
 
     // Extract expire_time - this is in seconds from invoice creation
-    const expireTimeTag = decoded.tags?.find((tag) => tag.tagName === 'expire_time');
+    const expireTimeTag = decoded.tags?.find((tag) => tag.tagName === 'expiry');
     const expiry = (expireTimeTag?.data as number) || 0;
 
     // Extract timestamp
-    const timestamp = decoded.timestamp as number;
+    const timestampTag = decoded.tags?.find((tag) => tag.tagName === 'timestamp');
+    const timestamp = (timestampTag?.data as number) || 0;
 
     const cleanData: CleanBolt11Data = {
       amountSat,
@@ -100,7 +123,7 @@ function parseBolt11(address: string): CleanBolt11Data | false {
 
     return cleanData;
   } catch (err) {
-    console.log('error parsing bolt11', err);
+    // Error extracting spark address; ignore and continue
     return false;
   }
 }
