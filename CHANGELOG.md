@@ -1,5 +1,9 @@
 # bitcoin-address-validation
 
+## 1.0.9
+
+- Switch bolt11 library from bolt11 to light-bolt11-decoder for repo consistancy
+
 ## 1.0.8
 
 - adding lud18
