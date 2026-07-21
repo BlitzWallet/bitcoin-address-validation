@@ -356,6 +356,25 @@ describe('lightning link invoices', () => {
       timestamp: 1651524875,
     });
   });
+  it('bolt11', async () => {
+    const address =
+      'lightning:lnbc210n1p49a5dssp5va3u592df5jg64dvavprlh2hthe8lqns8838heqeqj9d5rq4gysqpp5kp0gjmsrzumzu04yepf5cj9vkn05ykzqctlwzdsddtjysnxn4lkqhp5f6emujdvht9vp2xlyszzph62u0778jlp8pvzr5yntkel47v5xpwscqpjrzjqd0ylaqclj9424x9m8h2vcukcgnm6s56xfgu3j78zyqzhgs4hlpzvrvxycqqsncqqqqqqqqqqqqqpjqq2q9qxpqysgqga9m0ep6qt6c9se8nxrdxgztv5zupj2kyp62hvj342rdu5sevyssk7zr86663qu6yjy48mlzw9353jsrm7wqhwf8hy758j3gv4zemacp026p4a';
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.BOLT11);
+    expect(result && 'data' in result ? result.data : undefined).toEqual({
+      address:
+        'lnbc210n1p49a5dssp5va3u592df5jg64dvavprlh2hthe8lqns8838heqeqj9d5rq4gysqpp5kp0gjmsrzumzu04yepf5cj9vkn05ykzqctlwzdsddtjysnxn4lkqhp5f6emujdvht9vp2xlyszzph62u0778jlp8pvzr5yntkel47v5xpwscqpjrzjqd0ylaqclj9424x9m8h2vcukcgnm6s56xfgu3j78zyqzhgs4hlpzvrvxycqqsncqqqqqqqqqqqqqpjqq2q9qxpqysgqga9m0ep6qt6c9se8nxrdxgztv5zupj2kyp62hvj342rdu5sevyssk7zr86663qu6yjy48mlzw9353jsrm7wqhwf8hy758j3gv4zemacp026p4a',
+      expiry: 3600,
+      description: '',
+      payment_hash: 'b05e896e0317362e3ea4c8534c48acb4df425840c2fee1360d6ae4484cd3afec',
+      amountSat: 21,
+      amountMsat: 21000,
+      timestamp: 1784598960,
+      usingSparkAddress: undefined,
+    });
+  });
+
   it('bolt11 upper with lightning', async () => {
     const address =
       'lightning:LNBC110N1P38Q3GTPP5YPZ09JRD8P993SNJWNM68CPH4FTWP22LE34XD4R8FTSPWSHXHMNSDQQXQYJW5QCQPXSP5HTLG8YDPYWVSA7H3U4HDN77EHS4Z4E844EM0APJYVMQFKZQHHD2Q9QGSQQQYSSQSZPXZXT9UUQZYMR7ZXCDCCJ5G69S8Q7ZZJS7SGXN9EJHNVDH6GQJCY22MSS2YEXUNAGM5R2GQCZH8K24CWRQML3NJSKM548ARUHPWSSQ9NVRVZ';

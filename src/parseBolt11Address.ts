@@ -105,7 +105,7 @@ function parseBolt11(address: string): CleanBolt11Data | false {
 
     // Extract expire_time - this is in seconds from invoice creation
     const expireTimeTag = decoded.tags?.find((tag) => tag.tagName === 'expiry');
-    const expiry = (expireTimeTag?.data as number) || 0;
+    const expiry = (expireTimeTag?.data as number) || 3600;
 
     // Extract timestamp
     const timestampTag = decoded.tags?.find((tag) => tag.tagName === 'timestamp');
