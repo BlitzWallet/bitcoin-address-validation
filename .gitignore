@@ -38,9 +38,6 @@ jspm_packages
 lib
 dist
 
-# npm package lock
-package-lock.json
-
 others
 .DS_Store
 bitcoin-address-parser*
