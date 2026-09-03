@@ -680,6 +680,28 @@ describe('LNURL invoices', () => {
     }
   });
 
+  it('lnurl pay email form with malito:', async () => {
+    const address = 'mailto:blake@blitz-wallet.com';
+    mockGetLnurlParams = {
+      tag: 'payRequest',
+      callback: 'https://blitzwalletapp.com/lnurlp/blake',
+      minSendable: 1000,
+      maxSendable: 21000,
+      metadata: '[["text/plain","Email pay test"]]',
+    };
+
+    const result = await parseInput(address);
+
+    expect(result && 'type' in result ? result.type : undefined).toEqual(InputTypes.LNURL_PAY);
+
+    if (result && 'data' in result) {
+      expect(result.data.address).toEqual('blake@blitz-wallet.com');
+      if ('tag' in result.data) {
+        expect(result.data.tag).toEqual(InputTypes.LNURL_PAY);
+      }
+    }
+  });
+
   it('lnurl pay url form ', async () => {
     const address = 'https://blitz-wallet.com/.well-known/lnurlp/blake';
 

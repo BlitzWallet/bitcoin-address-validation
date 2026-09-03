@@ -74,7 +74,8 @@ async function parseLNURL(address: string): Promise<ParsedLNURLData | false> {
   try {
     let params: any = {};
     if (EMAIL_REGEX.test(address)) {
-      const [name, domain] = address.split('@');
+      const normalizedAddress = address.replace(/^mailto:/i, '');
+      const [name, domain] = normalizedAddress.split('@');
       const response = await fetch(`https://${domain}/.well-known/lnurlp/${name}`);
       const data = (await response.json()) as any;
 
@@ -157,4 +158,12 @@ function isLoginRequest(data: ParsedLNURLData): data is ParsedLNURLData & { data
 
 export { parseLNURL, isWithdrawRequest, isPayRequest, isLoginRequest };
 
-export type { ParsedLNURLData, WithdrawRequest, PayRequest, LoginRequest, LNURLParams, LNURLCurrency, PayerDataRequest };
+export type {
+  ParsedLNURLData,
+  WithdrawRequest,
+  PayRequest,
+  LoginRequest,
+  LNURLParams,
+  LNURLCurrency,
+  PayerDataRequest,
+};

@@ -24,7 +24,7 @@ async function parseLightningAddress(address: string) {
         ...isLNURL,
         data: {
           ...isLNURL.data,
-          address: address,
+          address: address.replace(/^mailto:/i, ''),
         },
       };
     }
