@@ -43,3 +43,4 @@ package-lock.json
 
 others
 .DS_Store
+bitcoin-address-parser*
