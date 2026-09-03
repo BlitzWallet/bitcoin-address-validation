@@ -1,6 +1,6 @@
 {
   "name": "bitcoin-address-parser",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "Parse any Bitcoin address - Bolt11, Bitcoin, LNURL, URI",
   "homepage": "https://github.com/blitzwallet/bitcoin-address-validation",
   "bugs": {

@@ -1,5 +1,9 @@
 # bitcoin-address-validation
 
+## 1.1.0
+
+- Handle mailto prefix for lnurl addresses
+
 ## 1.0.9
 
 - Switch bolt11 library from bolt11 to light-bolt11-decoder for repo consistancy
